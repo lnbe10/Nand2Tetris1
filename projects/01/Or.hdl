@@ -15,4 +15,9 @@ CHIP Or {
 
     PARTS:
     // Put your code here:
+    // OR(a,b) = NAND(NOT(a), NOT(b))
+
+    Not(in = a, out = nota);
+    Not(in = b, out = notb);
+    Nand(a = nota, b = notb, out = out);
 }

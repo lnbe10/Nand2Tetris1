@@ -15,4 +15,34 @@ CHIP Mux {
 
     PARTS:
     // Put your code here:
+    // Default strategy: find 1's in truth table out
+    // Truth table based in (a, b, sel -> out) in this
+    // sequence
+    // 0 = false, 1 = true
+    // Make the statement with AND's and join them
+    // together with OR:
+
+    //NOT's:
+    Not(in = a, out = na);
+    Not(in = b, out = nb);
+    Not(in = sel, out = nsel);
+
+    //necessary AND's with a, b
+    And(a = a,  b = b,  out = ab);
+    And(a = na, b = b,  out = nab);
+    And(a = a,  b = nb, out = anb);
+
+
+   //AND's statements
+   And(a = anb, b = nsel, out = out1);
+   And(a = ab,  b = nsel, out = out2);
+   And(a = nab, b = sel,  out = out3);
+   And(a = ab,  b = sel,  out = out4);
+
+   //Recursive OR with the AND out's
+    Or(a = out1, b = out2, out = or1);
+    Or(a = out3, b = out4, out = or2);
+
+    Or(a = or1, b = or2, out = out);
+
 }

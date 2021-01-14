@@ -13,5 +13,16 @@ CHIP Not {
     OUT out;
 
     PARTS:
-    // Put your code here:
+    // Two ideas:
+    // NAND(a, a) = NOT(a)
+    //  a  a  NAND
+    //  0  0   1
+    //  1  1   0
+    //
+    // NAND(true, a) = NOT(a)
+    //  true  a  NAND
+    //  1     0   1
+    //  1     1   0
+
+    Nand(a=in, b=in, out=out);
 }
