@@ -43,4 +43,37 @@ CHIP ALU {
 
     PARTS:
    // Put you code here:
+
+   // zx and zy:
+   Mux16(a = x, b = false, sel = zx, out = x0);
+   Mux16(a = y, b = false, sel = zy, out = y0);
+
+   // nx and ny:
+   Not16(in = x0, out = xn);
+   Not16(in = y0, out = yn);
+
+   Mux16(a = x0, b = xn, sel = nx, out = x1);
+   Mux16(a = y0, b = yn, sel = ny, out = y1);
+   
+
+   //x,y set, now sum or &:
+   Add16(a = x1, b = y1, out = add1);
+   And16(a = x1, b = y1, out = and1);
+
+   Mux16(a = and1, b = add1, sel = f, out = op);
+
+   //negate output? is negative (ng)?
+   Not16(in = op, out = nop);
+   Mux16(a = op, b = nop, sel=no, out[15] = ng, out[0..7] = part1, out[8..15] = part2, out = out);
+
+   //zr: if we do or(out[1], out[2],..., out[n]),
+   // if there's one or more 1's, them we got 1.
+   // only if each entry is 0 we got 0, so we
+   // make a NOT(Or16Way(out)) to get zr.
+   
+   Or8Way(in = part1,   out = or1);
+   Or8Way(in = part2,   out = or2);
+   Or    (a  = or1,     b   = or2, out = orfinal);
+   Not   (in = orfinal, out = zr);
+
 }
