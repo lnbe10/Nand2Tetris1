@@ -28,4 +28,32 @@ CHIP Memory {
 
     PARTS:
     // Put your code here:
+
+    // 		binary			hex
+    // 15  |14 13| 12		11..0
+    //  0  | 0  0|  0		0000 start memory
+    //  0  | 0  1|  1		ffff finish memory
+    //  0  | 1  0|  0		0000 start screen
+    //  0  | 1  0|  1		ffff finish screen
+    //  0  | 1  1|  0		0000 keyboard
+    //	   |MUX16|
+
+
+ 	DMux4Way( in = load,		sel = address[13..14],
+ 			   a = loadram1,	b   = loadram2,
+ 			   c = loadscreen,	d 	= loadkeyboard
+ 			  );
+
+ 	Or 	  ( a  = loadram1, b = loadram2, out = loadram);
+
+ 	RAM16K( in = in, load = loadram,	address = address[0..13], out = outram);
+
+ 	Screen( in = in, load = loadscreen, address = address[0..12], out = outscreen);
+
+    Keyboard( out = outkeyboard);
+
+ 	Mux4Way16( a = outram, b = outram, c = outscreen, d = outkeyboard,
+ 			 sel = address[13..14], out = out );
+
+
 }
